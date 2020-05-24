@@ -20,20 +20,19 @@ res<-enrich(mg,1)
 
  
   
+  
 plotGO<-function(res){
   library(tidyverse)
   
   top<- res$results[1:10,]
   top$logp<- -log(top$raw_p_overrep)
   
-  p<-top %>% 
-    ggplot(aes(reorder(node_name,logp ), logp)) + 
-    geom_col(aes(fill = logp)) +
-    scale_fill_gradient2(low = "white", 
-                         high = "blue", 
-                         midpoint = median(top$logp)) + coord_cartesian(ylim = c(min(top$logp)-5,max(top$logp)+5))+ 
-                          xlab("GO term") +ylab("logp")+ coord_flip() 
-  return(p)
-}  
 
+  p<-ggplot(top,aes(reorder(node_name,logp), logp)) + 
+    geom_col(aes(fill = logp)) +
+    scale_fill_gradient2(low = "white", high = "blue", midpoint = median(top$logp)) +  theme(axis.text=element_text(size=12),axis.title=element_text(size=14,face="bold"))+
+    xlab("GO term") +ylab("logp")+ coord_flip(ylim = c(min(top$logp)-5,max(top$logp)+5))  
+  return(p)
+} 
 plotGO(res)
+
